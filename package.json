@@ -1,0 +1,19 @@
+{
+  "name": "blog",
+  "version": "0.1.0",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "artemi",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/artemi13221/blog.git"
+  },
+  "bugs": {
+    "url": "https://github.com/artemi13221/blog/issues"
+  },
+  "homepage": "https://github.com/artemi13221/blog#readme",
+  "description": ""
+}
