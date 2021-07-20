@@ -1,0 +1,29 @@
+main {
+  max-width: 820px;
+  margin: 30px auto;
+}
+
+#text-title {
+  width: 100%;
+  padding: 0 15px;
+  margin-bottom: 20px;
+}
+
+#text-body {
+  width: 100%;
+  padding: 15px;
+  line-height: 1.5;
+}
+
+#btn {
+  text-align: center;
+  margin: 30px auto;
+}
+
+#btn-confirm {
+  font-size: 1.3em;
+}
+
+#btn-cancle {
+  font-size: 1.3em;
+}

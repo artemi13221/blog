@@ -1,0 +1,37 @@
+<html lang="kr">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>게시판</title>
+  <script src="main.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="contain">
+    <header>
+      <h1>Test Blog</h1>
+    </header>
+    <main>
+      <div id="start-menu">
+        <span>전체 글 (<%=totalCount %>)</span>
+        <a href="board.html" class="write-btn">✍</a>
+      </div>
+      <div id="board">
+        <% for(var i = 0; i < totalCount; i++) { %>
+          <div id="item">
+            <a href="">
+              <h3 class="title">
+                <%= data[i].title %>
+              </h3>
+              <span class="body">
+                <%= data[i].body %>
+              </span>
+            </a>
+          </div>
+        <% } %>
+      </div>
+    </main>
+  </div>
+</body>
+</html>
