@@ -1,14 +1,13 @@
 const express = require('express');
 const mongodb = require('mongodb').MongoClient;
-const { json: bodyParserJson } = require('body-parser');
+// const { json: bodyParserJson } = require('body-parser');
 require('dotenv').config();
 
 const mongodbUrl = process.env.MONGODB_URL;
 const app = express();
 
 class BoardData {
-  constructor(id, title, body, createAt, modifiedAt) {
-    this.id = id;
+  constructor(title, body, createAt, modifiedAt) {
     this.title = title;
     this.body = body;
     this.createAt = createAt;
@@ -24,7 +23,7 @@ mongodb.connect(mongodbUrl)
     const boardCollections = db.collection('board');
 
     app.use(express.static(`${__dirname}/../public`));
-    app.use(bodyParserJson());
+    app.use(express.json());
     app.set('view engine', 'ejs');
 
     app.get('/', (req, res) => {
@@ -38,10 +37,15 @@ mongodb.connect(mongodbUrl)
         .catch((error) => console.error(error));
     });
 
+    app.get('/:id', (req, res) => {
+      console.log(req);
+      res.send('ok');
+    });
+
     app.post('/board', (req, res) => {
       const data = req.body;
       boardCollections.insertOne(
-        new BoardData(data.id, data.title, data.body, data.createAt, data.modifiedAt),
+        new BoardData(data.title, data.body, data.createAt, data.modifiedAt),
       )
         .then((result) => {
           res.send('ok');
@@ -61,8 +65,8 @@ mongodb.connect(mongodbUrl)
         .catch((error) => console.error(error));
     });
 
-    app.listen(3000, () => {
-      console.log('3000port server open!');
+    app.listen(10001, () => {
+      console.log('10001port server open!');
     });
   })
   .catch((error) => console.error(error));

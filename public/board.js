@@ -1,5 +1,5 @@
 const btnConfirm = document.querySelector('#btn-confirm');
-const btnCancle = document.querySelector('#btn-cancle');
+const btnCancel = document.querySelector('#btn-cancel');
 
 btnConfirm.addEventListener('click', () => {
   const title = document.querySelector('#text-title');
@@ -25,6 +25,6 @@ btnConfirm.addEventListener('click', () => {
   }
 });
 
-btnCancle.addEventListener('click', () => {
+btnCancel.addEventListener('click', () => {
   if (confirm('정말 취소하시겠습니까?')) { window.history.back(); }
 });
