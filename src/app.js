@@ -1,5 +1,6 @@
 const express = require('express');
 const mongodb = require('mongodb').MongoClient;
+const { ObjectId } = require('mongodb');
 // const { json: bodyParserJson } = require('body-parser');
 require('dotenv').config();
 
@@ -37,9 +38,16 @@ mongodb.connect(mongodbUrl)
         .catch((error) => console.error(error));
     });
 
-    app.get('/:id', (req, res) => {
-      console.log(req);
-      res.send('ok');
+    app.get('/board/:id', (req, res) => {
+      boardCollections.findOne({
+        _id: new ObjectId(req.params.id),
+      })
+        .then((result) => {
+          res.render('board.ejs', {
+            data: result,
+          });
+        })
+        .catch((error) => console.error(error));
     });
 
     app.post('/board', (req, res) => {

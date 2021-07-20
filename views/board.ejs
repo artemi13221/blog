@@ -1,0 +1,28 @@
+<html lang="kr">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= data.title %></title>
+  <link type="text/css" rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div id="container">
+    <header>
+      <h1>Test Blog</h1>
+    </header>
+    <main>
+      <div id="text-title">
+        <h1><%= data.title %></h1>
+        <div id="tags">
+          <span class="author"></span>
+          <span class="date"><%= new Date(data.createAt) %></span>
+        </div>
+      </div>
+      <div id="text-body">
+        <%= data.body %>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

@@ -18,9 +18,9 @@
         <a href="board.html" class="write-btn">✍</a>
       </div>
       <div id="board">
-        <% for(var i = 0; i < totalCount; i++) { %>
+        <% for(var i = totalCount - 1; i >= 0; i--) { %>
           <div id="item">
-            <a href="">
+            <a href="board/<%= data[i]._id %>">
               <h3 class="title">
                 <%= data[i].title %>
               </h3>
