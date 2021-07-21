@@ -1,0 +1,38 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+#contain {
+  margin: 0 auto;
+}
+
+header > h1 {
+  padding: 28px 0 35px;
+  text-align: center;
+  font-size: 1.5em;
+}
+
+main {
+  margin: 0 auto;
+  max-width: 860px;
+}
+
+#text-title {
+  padding: 0 0 50px;
+  margin: 0 0 30px;
+  border-bottom: 1px solid #ebebeb;
+}
+
+#text-title h1 {
+  margin: 15px 0;
+}
+
+.date {
+  font-size: 0.8em;
+  color: #666;
+  padding: 0 2px;
+}
+
+#btn {
+  float: right;
+}

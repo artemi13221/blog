@@ -39,15 +39,19 @@ mongodb.connect(mongodbUrl)
     });
 
     app.get('/board/:id', (req, res) => {
-      boardCollections.findOne({
-        _id: new ObjectId(req.params.id),
-      })
-        .then((result) => {
-          res.render('board.ejs', {
-            data: result,
-          });
+      try {
+        boardCollections.findOne({
+          _id: new ObjectId(req.params.id),
         })
-        .catch((error) => console.error(error));
+          .then((result) => {
+            res.render('post.ejs', {
+              data: result,
+            });
+          })
+          .catch((error) => console.error(error));
+      } catch (error) {
+        res.status(404).send('404 ERROR');
+      }
     });
 
     app.post('/board', (req, res) => {
@@ -61,14 +65,34 @@ mongodb.connect(mongodbUrl)
         .catch((error) => console.error(error));
     });
 
+    /*
     app.put('/board', (req, res) => {
       const data = req.body;
       boardCollections.findOne({
-        id: data,
+        _id: new ObjectId(data.id),
       })
         .then((result) => {
-          console.log(result);
-          res.send('ok');
+          if (result === undefined) {
+            res.send('error');
+          } else {
+            res.send('ok');
+          }
+        })
+        .catch((error) => console.error(error));
+    });
+    */
+
+    app.delete('/board', (req, res) => {
+      const data = req.body;
+      boardCollections.deleteOne({
+        _id: new ObjectId(data.id),
+      })
+        .then((result) => {
+          if (result.deletedCount === 0) {
+            res.send('error');
+          } else {
+            res.send('ok');
+          }
         })
         .catch((error) => console.error(error));
     });
