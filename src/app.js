@@ -65,22 +65,48 @@ mongodb.connect(mongodbUrl)
         .catch((error) => console.error(error));
     });
 
-    /*
-    app.put('/board', (req, res) => {
-      const data = req.body;
-      boardCollections.findOne({
-        _id: new ObjectId(data.id),
-      })
-        .then((result) => {
-          if (result === undefined) {
-            res.send('error');
-          } else {
-            res.send('ok');
-          }
+    app.get('/newpost', (req, res) => {
+      const data = req.query;
+      try {
+        boardCollections.findOne({
+          _id: new ObjectId(data.id),
         })
-        .catch((error) => console.error(error));
+          .then((result) => {
+            if (result === undefined) {
+              res.send('error');
+            } else {
+              res.render('board.ejs', {
+                data: result,
+              });
+            }
+          })
+          .catch((error) => console.error(error));
+      } catch (error) {
+        res.status(404).send('ERROR 404');
+      }
     });
-    */
+
+    app.put('/board', (req, res) => {
+      try {
+        const data = req.body;
+        boardCollections.updateOne({
+          _id: new ObjectId(data.id),
+        }, {
+          $set: {
+            title: data.title,
+            body: data.body,
+            modifiedAt: data.modifiedAt,
+          },
+        })
+          .then((result) => {
+            console.log(result);
+            res.send('ok');
+          })
+          .catch((error) => console.error(error));
+      } catch (error) {
+        res.status(404).send('ERROR 404');
+      }
+    });
 
     app.delete('/board', (req, res) => {
       const data = req.body;

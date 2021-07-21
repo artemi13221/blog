@@ -7,11 +7,9 @@ function getID() {
   return urlArray[urlArray.length - 1];
 }
 
-/*
 modifyBtn.addEventListener('click', () => {
-  window.location.replace(`/modify?id=${getID()}`);
+  window.location.href = `/newpost?id=${getID()}`;
 });
-*/
 
 deleteBtn.addEventListener('click', () => {
   if (confirm('정말 삭제하시겠습니까?')) {
@@ -23,8 +21,6 @@ deleteBtn.addEventListener('click', () => {
       .then((responses) => {
         if (responses.data === 'error') {
           alert('에러가 발생하였습니다. 이미 삭제된 게시글입니다.');
-        } else {
-          alert('에러가 발생하였습니다.');
         }
         window.location.replace('/');
       })
