@@ -1,16 +1,27 @@
 const btnConfirm = document.querySelector('#btn-confirm');
 const btnCancel = document.querySelector('#btn-cancel');
 
+function getPostID() {
+  const params = window.location.search.substr(1).split('=');
+
+  if (params[0] === 'id') {
+    return params[1];
+  }
+
+  return undefined;
+}
+
 btnConfirm.addEventListener('click', () => {
   const title = document.querySelector('#text-title');
   const body = document.querySelector('#text-body');
   const time = Date.now();
-  /*
+  const idData = getPostID();
+
   if (title.value === '') {
     alert('제목을 입력해주세요.');
   } else if (body.value === '') {
     alert('본문을 입력해주세요.');
-  } else {
+  } else if (idData === undefined) {
     axios.post('/board', {
       id: 1,
       title: title.value,
@@ -20,18 +31,12 @@ btnConfirm.addEventListener('click', () => {
     })
       .then((responses) => {
         console.log(responses);
-        window.location.href('/');
+        window.location.href = '/';
       })
       .catch((error) => console.error(error));
-  }
-  */
-  if (title.value === '') {
-    alert('제목을 입력해주세요.');
-  } else if (body.value === '') {
-    alert('본문을 입력해주세요.');
   } else {
     axios.put('/board', {
-      id: data._id,
+      id: idData,
       title: title.value,
       body: body.value,
       modifiedAt: time,
