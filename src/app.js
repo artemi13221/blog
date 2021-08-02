@@ -73,9 +73,14 @@ mongodb.connect(mongodbUrl)
         })
           .then((result) => {
             if (result === undefined) {
-              res.send('error');
+              res.render('newpost.ejs', {
+                data: {
+                  title: '',
+                  body: '',
+                },
+              });
             } else {
-              res.render('board.ejs', {
+              res.render('newpost.ejs', {
                 data: result,
               });
             }
@@ -99,7 +104,6 @@ mongodb.connect(mongodbUrl)
           },
         })
           .then((result) => {
-            console.log(result);
             res.send('ok');
           })
           .catch((error) => console.error(error));
