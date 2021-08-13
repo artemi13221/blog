@@ -47,6 +47,9 @@ if (mongodbUrl === undefined) {
         res.render('index.ejs', {
           totalCount: result.length,
           data: result,
+          user: {
+            role: undefined
+          }
         });
       })
       .catch((error) => console.error(error));

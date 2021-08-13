@@ -17,7 +17,19 @@
     <main>
       <div id="start-menu">
         <span>전체 글 (<%=totalCount %>)</span>
-        <a href="/newpost" class="write-btn">✍</a>
+        <% if (user.role === 'admin') { %>
+          <a href="/newpost" class="write-btn">✍</a>
+        <% } else if (user.role === 'guest') {%>
+          <p class="write-btn">Hello, Guest!</p>
+        <% } else if (user) {%>
+          <button id="login-btn" class="write-btn">Login</button>
+          <script>
+            const loginBtn = document.querySelector('#login-btn');
+            loginBtn.addEventListener('click', () => {
+              window.location.href = '/login';
+            });
+          </script>
+        <%}%>
       </div>
       <div id="board">
         <% for(var i=totalCount - 1; i>= 0; i--) { %>
