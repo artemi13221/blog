@@ -1,4 +1,5 @@
 <html lang="kr">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,10 +8,11 @@
   <script src="main.js"></script>
   <link rel="stylesheet" href="index.css">
 </head>
+
 <body>
   <div id="contain">
     <header>
-      <h1>Test Blog</h1>
+      <h1><a href="/">Test Blog</a></h1>
     </header>
     <main>
       <div id="start-menu">
@@ -18,7 +20,7 @@
         <a href="/newpost" class="write-btn">✍</a>
       </div>
       <div id="board">
-        <% for(var i = totalCount - 1; i >= 0; i--) { %>
+        <% for(var i=totalCount - 1; i>= 0; i--) { %>
           <div id="item">
             <a href="board/<%= data[i]._id %>">
               <h3 class="title">
@@ -29,9 +31,10 @@
               </span>
             </a>
           </div>
-        <% } %>
+          <% } %>
       </div>
     </main>
   </div>
 </body>
+
 </html>

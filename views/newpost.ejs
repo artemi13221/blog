@@ -1,4 +1,5 @@
 <html lang="kr">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,14 +9,16 @@
   <script defer src="/newpost.js"></script>
   <link rel="stylesheet" href="/newpost.css">
 </head>
+
 <body>
   <main>
     <input type="text" name="title" id="text-title" value="<%=data.title%>">
     <textarea name="body" id="text-body" cols="30" rows="35"><%=data.body%></textarea>
     <div id="btn">
-        <button id="btn-confirm">작성</button>
-        <button id="btn-cancel">취소</button>
+      <button id="btn-confirm">작성</button>
+      <button id="btn-cancel">취소</button>
     </div>
   </main>
 </body>
+
 </html>

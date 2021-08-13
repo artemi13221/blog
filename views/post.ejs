@@ -1,13 +1,17 @@
 <html lang="kr">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><%= data.title %></title>
+  <title>
+    <%= data.title %>
+  </title>
   <link type="text/css" rel="stylesheet" href="/post.css">
   <script defer src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script defer src="/post.js"></script>
 </head>
+
 <body>
   <div id="container">
     <header>
@@ -15,15 +19,17 @@
     </header>
     <main>
       <div id="text-title">
-        <h1><%= data.title %></h1>
+        <h1>
+          <%= data.title %>
+        </h1>
         <div id="tags">
           <span class="author"></span>
           <span class="date">
-            <% var date = new Date(data.createAt) %>
-            <%=date.getFullYear()%>.
-            <%=date.getMonth() + 1%>.
-            <%=date.getDate()%>.
-            <%=date.getHours()%>:<%=date.getMinutes()%>
+            <% var date=new Date(data.createAt) %>
+              <%=date.getFullYear()%>.
+                <%=date.getMonth() + 1%>.
+                  <%=date.getDate()%>.
+                    <%=date.getHours()%>:<%=date.getMinutes()%>
           </span>
         </div>
         <div id="btn">
@@ -37,4 +43,5 @@
     </main>
   </div>
 </body>
+
 </html>
