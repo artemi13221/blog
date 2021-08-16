@@ -17,8 +17,9 @@
     <main>
       <div id="start-menu">
         <span>전체 글 (<%=totalCount %>)</span>
-        <% if (user.role === 'admin') { %>
+        <% if (user.role === 'artemi') { %>
           <a href="/newpost" class="write-btn">✍</a>
+          <a href="/logout" class="write-btn">Logout</a>
         <% } else if (user.role === 'guest') {%>
           <p class="write-btn">Hello, Guest!</p>
         <% } else if (user) {%>
