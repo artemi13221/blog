@@ -1,1 +1,5 @@
-console.log('hello!!');
+const submitBtn = document.querySelector('.submit-btn');
+
+submitBtn.addEventListener('click', () => {
+    
+})
