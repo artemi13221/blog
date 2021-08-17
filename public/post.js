@@ -19,6 +19,10 @@ deleteBtn.addEventListener('click', () => {
       },
     })
       .then((responses) => {
+        if (responses.data === 'role error') {
+          alert('당신은 권한이 없습니다.');
+          return;
+        } 
         if (responses.data === 'error') {
           alert('에러가 발생하였습니다. 이미 삭제된 게시글입니다.');
         }
