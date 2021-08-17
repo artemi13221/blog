@@ -33,18 +33,37 @@
         <%}%>
       </div>
       <div id="board">
-        <% for(var i=totalCount - 1; i>= 0; i--) { %>
-          <div id="item">
-            <a href="board/<%= data[i]._id %>">
-              <h3 class="title">
-                <%= data[i].title %>
-              </h3>
-              <span class="body">
-                <%= data[i].body %>
-              </span>
-            </a>
-          </div>
+        <% var index = totalCount - 1; %>
+        <% var pageNation = 10; %>
+        <% for (var j = 0; j < page; j++) { %>
+          <% index = index - pageNation; %>
+        <% } %>
+        <% if (index >= 0) { %>
+          <% var i = pageNation - 1; %>
+          <% if (i > index) { %>
+            <% i = index; %>
           <% } %>
+          <% while (i >= 0) { %>
+            <div id="item">
+              <a href="board/<%= data[index]._id %>">
+                <h3 class="title">
+                  <%= data[index].title %>
+                </h3>
+                <span class="body">
+                  <%= data[index].body %>
+                </span>
+              </a>
+            </div>
+            <% index = index - 1 %>
+            <% i = i - 1 %>
+            <% } %>
+        <% } %>
+         <div id="page-nation">
+          <% var pageNum = parseInt((totalCount - 1) / 10); %>
+          <% for (var k = 0; k <= pageNum; k++) { %>
+            <a href="/?page=<%=k%>"> <%= k+1 %> </a>
+          <% } %>
+         </div>
       </div>
     </main>
   </div>
