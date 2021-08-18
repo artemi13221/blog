@@ -103,12 +103,12 @@ if (mongodbUrl === undefined) {
         res.redirect('/');
       })
 
-      app.get('/board/:id', (req, res) => {
+      app.get('/board/:id', (req, res, next) => {
         let boardID: ObjectId;
         try {
           boardID = new ObjectId(req.params.id);
         } catch (error) {
-          res.status(404).send(`404 ERROR!! <br> ${error}`);
+          next(error);
           return;
         }
 
@@ -138,12 +138,12 @@ if (mongodbUrl === undefined) {
           .catch((error) => console.error(error));
       });
 
-      app.get('/newpost', (req, res) => {
+      app.get('/newpost', (req, res, next) => {
         let boardID: ObjectId;
         try {
           boardID = new ObjectId(req.query.id as string);
         } catch (error) {
-          res.status(404).send(`404 ERROR!! <br> ${error}`);
+          next(error);
           return;
         }
 
@@ -171,12 +171,12 @@ if (mongodbUrl === undefined) {
           .catch((error) => console.error(error));
       });
 
-      app.put('/board', (req, res) => {
+      app.put('/board', (req, res, next) => {
         let boardID: ObjectId;
         try {
           boardID = new ObjectId(req.body.id);
         } catch (error) {
-          res.status(404).send(`404 ERROR!! <br> ${error}`);
+          next();
           return;
         }
 
@@ -196,12 +196,12 @@ if (mongodbUrl === undefined) {
           .catch((error) => console.error(error));
       });
 
-      app.delete('/board', (req, res) => {
+      app.delete('/board', (req, res, next) => {
         let boardID: ObjectId;
         try {
           boardID = new ObjectId(req.body.id);
         } catch (error) {
-          res.status(404).send(`404 ERROR!! <br> ${error}`);
+          next(error);
           return;
         }
         if ((req.session as any).uid !== 'artemi') {
@@ -219,6 +219,19 @@ if (mongodbUrl === undefined) {
             }
           })
           .catch((error) => console.error(error));
+      });
+
+      app.use((req, res, next) => {
+        const error = new Error(`${req.method} ${req.url} 라우터가 존재하지 않습니다.`);
+        res.locals.errorNum = 404;
+        next(error);
+      })
+
+      app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
+        res.locals.message = err.message;
+        res.locals.error = err.stack;
+        res.status(res.locals.errorNum ?? 500);
+        res.render('error.ejs');
       });
 
       app.listen(10001, () => {
