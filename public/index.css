@@ -78,3 +78,18 @@ main {
   font-size: 0.93em;
   color: #666;
 }
+
+#page-nation {
+  margin: 0 auto;
+  text-align: center;
+  font-size: 150%;
+}
+
+#page-nation > a {
+  text-decoration: none;
+  margin: 0 5px;
+}
+
+#page-nation > a:not(:last-child) {
+  border-right: 1px solid #dae1e6;
+}
