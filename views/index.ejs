@@ -17,53 +17,42 @@
     <main>
       <div id="start-menu">
         <span>전체 글 (<%=totalCount %>)</span>
-        <% if (user.role === 'artemi') { %>
+        <% if (user.role==='artemi' ) { %>
           <a href="/newpost" class="write-btn">✍</a>
           <a href="/logout" class="write-btn">Logout</a>
-        <% } else if (user.role === 'guest') {%>
-          <p class="write-btn">Hello, Guest!</p>
-        <% } else if (user) {%>
-          <button id="login-btn" class="write-btn">Login</button>
-          <script>
-            const loginBtn = document.querySelector('#login-btn');
-            loginBtn.addEventListener('click', () => {
-              window.location.href = '/login';
-            });
-          </script>
-        <%}%>
+          <% } else if (user.role==='guest' ) {%>
+            <p class="write-btn">Hello, Guest!</p>
+            <% } else if (user) {%>
+              <button id="login-btn" class="write-btn">Login</button>
+              <script>
+                const loginBtn = document.querySelector('#login-btn');
+                loginBtn.addEventListener('click', () => {
+                  window.location.href = '/login';
+                });
+              </script>
+              <%}%>
       </div>
       <div id="board">
-        <% var index = totalCount - 1; %>
-        <% var pageNation = 10; %>
-        <% for (var j = 0; j < page; j++) { %>
-          <% index = index - pageNation; %>
-        <% } %>
-        <% if (index >= 0) { %>
-          <% var i = pageNation - 1; %>
-          <% if (i > index) { %>
-            <% i = index; %>
+        <% for (var i=0; i < indexNum; i++) { %>
+          <div id="item">
+            <a href="board/<%= data[i]._id %>">
+              <h3 class="title">
+                <%= data[i].title %>
+              </h3>
+              <span class="body">
+                <%= data[i].body %>
+              </span>
+            </a>
+          </div>
           <% } %>
-          <% while (i >= 0) { %>
-            <div id="item">
-              <a href="board/<%= data[index]._id %>">
-                <h3 class="title">
-                  <%= data[index].title %>
-                </h3>
-                <span class="body">
-                  <%= data[index].body %>
-                </span>
-              </a>
+            <div id="page-nation">
+              <% var pageNum=parseInt((totalCount - 1) / 10); %>
+                <% for (var k=0; k <=pageNum; k++) { %>
+                  <a href="/?page=<%=k%>">
+                    <%= k+1 %>
+                  </a>
+                  <% } %>
             </div>
-            <% index = index - 1 %>
-            <% i = i - 1 %>
-            <% } %>
-        <% } %>
-         <div id="page-nation">
-          <% var pageNum = parseInt((totalCount - 1) / 10); %>
-          <% for (var k = 0; k <= pageNum; k++) { %>
-            <a href="/?page=<%=k%>"> <%= k+1 %> </a>
-          <% } %>
-         </div>
       </div>
     </main>
   </div>
