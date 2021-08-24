@@ -2,10 +2,12 @@ import express from 'express';
 import mongoose from 'mongoose';
 // import console from 'console';
 import { boardSchema } from '../db_schema';
+import boardRouter from './board';
 
 const router = express.Router();
+const board = mongoose.model('Board', boardSchema);
 
-// router.get('/board', );
+router.use('/board', boardRouter);
 
 // router.get('/login', );
 
@@ -20,8 +22,6 @@ router.get('/', async (req, res, next) => {
     next();
     return;
   }
-
-  const board = mongoose.model('Board', boardSchema);
   const findResult = await board.find()
     .select('_id title body')
     .skip(10 * page)
