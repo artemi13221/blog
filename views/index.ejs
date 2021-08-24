@@ -47,9 +47,9 @@
           <% } %>
             <div id="page-nation">
               <% var pageNum=parseInt((totalCount - 1) / 10); %>
-                <% for (var k=0; k <=pageNum; k++) { %>
+                <% for (var k=1; k <=pageNum+1; k++) { %>
                   <a href="/?page=<%=k%>">
-                    <%= k+1 %>
+                    <%= k %>
                   </a>
                   <% } %>
             </div>
