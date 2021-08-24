@@ -1,3 +1,5 @@
+/* eslint-disable import/extensions */
+/* eslint-disable import/no-unresolved */
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import expressSession from 'express-session';
