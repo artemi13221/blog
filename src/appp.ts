@@ -4,7 +4,7 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import expressSession from 'express-session';
 import dotenv from 'dotenv';
-import mongoose, { Error } from 'mongoose';
+import mongoose from 'mongoose';
 import console from 'console';
 import Router from './router/router';
 
