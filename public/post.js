@@ -8,7 +8,7 @@ function getID() {
 }
 
 modifyBtn.addEventListener('click', () => {
-  window.location.href = `/newpost?id=${getID()}`;
+  window.location.href = `/board/newpost?id=${getID()}`;
 });
 
 deleteBtn.addEventListener('click', () => {
@@ -22,7 +22,7 @@ deleteBtn.addEventListener('click', () => {
         if (responses.data === 'role error') {
           alert('당신은 권한이 없습니다.');
           return;
-        } 
+        }
         if (responses.data === 'error') {
           alert('에러가 발생하였습니다. 이미 삭제된 게시글입니다.');
         }

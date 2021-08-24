@@ -23,7 +23,6 @@ btnConfirm.addEventListener('click', () => {
     alert('본문을 입력해주세요.');
   } else if (idData === undefined) {
     axios.post('/board', {
-      id: 1,
       title: title.value,
       body: body.value,
       createAt: time,
