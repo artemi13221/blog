@@ -2,9 +2,9 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import expressSession from 'express-session';
 import dotenv from 'dotenv';
-import mongoose from 'mongoose';
+import mongoose, { Error } from 'mongoose';
 import console from 'console';
-import Router from './router/router'
+import Router from './router/router';
 
 dotenv.config();
 
@@ -29,6 +29,8 @@ async function connectMongoose() {
 
 // Express app main
 const app = express();
+const port = process.env.PORT ?? 10002;
+
 connectMongoose();
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
@@ -57,7 +59,23 @@ app.set('view engine', 'ejs');
 // Router
 app.use(Router);
 
+// Status 404
+app.use((req, res, next) => {
+  const err = new Error(`${req.method} ${req.url} 라우터가 없습니다.`);
+  res.locals.errNum = 404;
+  next(err);
+});
+
+// Error Handling function
+app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
+  res.locals.message = err.message;
+  res.locals.error = process.env.NODE_ENV !== 'production' ? err : {};
+  res.status(res.locals.errNum ?? 500);
+  res.render('error.ejs');
+  next();
+});
+
 // listen
 app.listen(10002, () => {
-  console.log('10001port server open!');
+  console.log(`PORT: ${port}, server open!`);
 });
