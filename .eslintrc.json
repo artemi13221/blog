@@ -15,5 +15,8 @@
         "@typescript-eslint"
     ],
     "rules": {
+        "no-unused-vars": "warn",
+        // 이건.. 전 사용 안하는데 그 이유는 default로 export 해버리면 이름의 일관성을 지키기 어렵다는 문제가 있어요
+        "import/prefer-default-export": "off"
     }
 }

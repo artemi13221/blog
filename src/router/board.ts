@@ -1,9 +1,14 @@
 import express from 'express';
+// 이 라우터에서 mongoose 이걸 import 하는건 좋은게 아님
 import mongoose from 'mongoose';
+import { ObjectId } from '../mongoose';
 import { boardSchema } from '../db_schema';
+import { BoardModel } from '../mongooseSchema/Board';
 
 const router = express.Router();
 const Board = mongoose.model('Board', boardSchema);
+
+// 타입 추론되는지 보자
 
 // Write a board and create db
 router.post('/', async (req, res, next) => {
@@ -104,23 +109,24 @@ router.get('/newpost', async (req, res, next) => {
 
 // Read a board.
 router.get('/:id', async (req, res, next) => {
-  let boardID: mongoose.Types._ObjectId;
-  let findResult: mongoose.Callback;
-  try {
-    boardID = mongoose.Types.ObjectId(req.params.id);
-    findResult = await Board.findOne({ _id: boardID });
-  } catch (error) {
-    next(error);
-    return;
-  }
-  if (!findResult) {
-    next();
-    return;
-  }
+  const postId = req.params.id;
 
-  res.render('post.ejs', {
-    data: findResult,
-  });
+  try {
+    const result = await BoardModel.findOne({
+      _id: ObjectId(postId),
+    });
+
+    if (!result) {
+      next();
+      return;
+    }
+
+    res.render('post.ejs', {
+      data: result,
+    });
+  } catch (error) {
+    next();
+  }
 });
 
 export default router;
