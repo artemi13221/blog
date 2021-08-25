@@ -51,13 +51,17 @@ router.put('/', async (req, res, next) => {
 // Delete a board and delete db
 router.delete('/', async (req, res, next) => {
   let boardID: mongoose.Types._ObjectId;
-  if (!req.body.id) {
+  if (!req.body.id || typeof req.body.id !== 'string') {
     next();
     return;
   }
   try {
     boardID = mongoose.Types.ObjectId(req.body.id);
-    await Board.deleteOne({ _id: boardID });
+    if (await Board.findOne({ _id: boardID })) {
+      await Board.deleteOne({ _id: boardID });
+    } else {
+      throw new Error('undefined boardID');
+    }
   } catch (error) {
     next(error);
     return;
@@ -75,36 +79,33 @@ router.get('/newpost', async (req, res, next) => {
     next();
     return;
   }
-  let findResult;
-
-  if (req.query.id !== 'undefined') {
-    try {
-      boardID = mongoose.Types.ObjectId(req.query.id);
-      findResult = await Board.findOne({ _id: boardID }).select('title body');
-    } catch (error) {
-      next(error);
-      return;
-    }
-  }
-
-  if (findResult) {
-    res.render('newpost.ejs', {
-      data: findResult,
-    });
-  } else {
+  let findResult: mongoose.Callback;
+  if (req.query.id === 'undefined') {
     res.render('newpost.ejs', {
       data: {
         title: '',
         body: '',
       },
     });
+    return;
   }
+
+  try {
+    boardID = mongoose.Types.ObjectId(req.query.id);
+    findResult = await Board.findOne({ _id: boardID }).select('title body');
+  } catch (error) {
+    next(error);
+    return;
+  }
+  res.render('newpost.ejs', {
+    data: findResult,
+  });
 });
 
 // Read a board.
 router.get('/:id', async (req, res, next) => {
   let boardID: mongoose.Types._ObjectId;
-  let findResult;
+  let findResult: mongoose.Callback;
   try {
     boardID = mongoose.Types.ObjectId(req.params.id);
     findResult = await Board.findOne({ _id: boardID });
