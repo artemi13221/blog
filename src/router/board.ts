@@ -8,8 +8,6 @@ import { BoardModel } from '../mongooseSchema/Board';
 const router = express.Router();
 const Board = mongoose.model('Board', boardSchema);
 
-// 타입 추론되는지 보자
-
 // Write a board and create db
 router.post('/', async (req, res, next) => {
   const data = req.body;
