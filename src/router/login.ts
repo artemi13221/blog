@@ -1,13 +1,22 @@
 import express from 'express';
-import mongoose from 'mongoose';
+// import { Types } from 'mongoose';
+// import { UserModel } from '../mongooseSchema';
 
 const router = express.Router();
 
 // GET Login Page
-router.get('/');
+router.get('/', (req, res) => {
+  res.render('login.ejs');
+});
 
 // POST Login and logout
 router.post('/');
 
+// GET Register Page
+router.get('/register', (req, res) => {
+  res.send(null);
+});
+
+const loginRouter = router
 // Module export
-export default router;
+export { loginRouter };
