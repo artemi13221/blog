@@ -1,15 +1,12 @@
 import express from 'express';
-import mongoose from 'mongoose';
-// import console from 'console';
-import { boardSchema } from '../db_schema';
-import boardRouter from './board';
+import { BoardModel } from '../mongooseSchema';
+import { boardRouter } from './board';
+import { loginRouter } from './login';
 
 const router = express.Router();
-const board = mongoose.model('Board', boardSchema);
-
 router.use('/board', boardRouter);
 
-// router.get('/login', );
+router.use('/login', loginRouter);
 
 router.get('/', async (req, res, next) => {
   const queryPage = req.query.page ?? '1';
@@ -22,11 +19,11 @@ router.get('/', async (req, res, next) => {
     next();
     return;
   }
-  const findResult = await board.find()
+  const findResult = await BoardModel.find({ isDeleted: false })
     .select('_id title body')
     .skip(10 * page)
     .limit(10)
-    .sort({ createAt: 'descending' })
+    .sort({ createdAt: 'descending' })
     .exec();
 
   if (!findResult) {
@@ -35,7 +32,7 @@ router.get('/', async (req, res, next) => {
   }
 
   res.render('index.ejs', {
-    totalCount: await board.countDocuments(),
+    totalCount: await BoardModel.countDocuments({ isDeleted: false }),
     indexNum: findResult.length,
     data: findResult,
     user: {
