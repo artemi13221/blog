@@ -15,5 +15,7 @@
         "@typescript-eslint"
     ],
     "rules": {
+        "no-unused-vars": "warn",
+        "import/prefer-default-export": "off"
     }
 }
