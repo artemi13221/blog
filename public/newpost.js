@@ -23,10 +23,9 @@ btnConfirm.addEventListener('click', () => {
     alert('본문을 입력해주세요.');
   } else if (idData === undefined) {
     axios.post('/board', {
+      poster: '',
       title: title.value,
       body: body.value,
-      createAt: time,
-      modifiedAt: time,
     })
       .then((responses) => {
         console.log(responses);
@@ -36,9 +35,9 @@ btnConfirm.addEventListener('click', () => {
   } else {
     axios.put('/board', {
       id: idData,
+      poster: '',
       title: title.value,
       body: body.value,
-      modifiedAt: time,
     })
       .then((responses) => {
         console.log(responses);
