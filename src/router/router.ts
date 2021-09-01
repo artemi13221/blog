@@ -36,7 +36,8 @@ router.get('/', async (req, res, next) => {
     indexNum: findResult.length,
     data: findResult,
     user: {
-      role: undefined,
+      id: (req.session as any).user,
+      role: (req.session as any).role,
     },
   });
 });

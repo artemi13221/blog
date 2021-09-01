@@ -17,11 +17,19 @@
     <main>
       <div id="start-menu">
         <span>전체 글 (<%=totalCount %>)</span>
-        <% if (user.role==='artemi' ) { %>
-          <a href="/newpost" class="write-btn">✍</a>
-          <a href="/logout" class="write-btn">Logout</a>
+        <% if (user.role==='admin' ) { %>
+          <a href="/board/newpost" class="write-btn">✍</a>
+          <form action="/login" method="post" class="write-btn">
+            <input type="hidden" name="type" value="logout">
+            <input type="submit" value="📴" class="write-btn">
+          </form>
           <% } else if (user.role==='guest' ) {%>
-            <p class="write-btn">Hello, Guest!</p>
+            <p class="write-btn">Hello, <%=user.id%>
+            </p>
+            <form action="/login" method="post" class="write-btn">
+              <input type="hidden" name="type" value="logout">
+              <input type="submit" value="📴" class="write-btn">
+            </form>
             <% } else if (user) {%>
               <button id="login-btn" class="write-btn">Login</button>
               <script>

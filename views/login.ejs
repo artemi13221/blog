@@ -14,6 +14,7 @@
     <div id="login-field">
         <form action="/login" method="POST">
             <div id="text-field">
+                <input type="hidden" name="type" value="login">
                 <input type="text" name="id" class="id-field" maxlength="20" placeholder="ID" required>
                 <input type="password" name="pw" class="pw-field" maxlength="20" placeholder="PW" required>
             </div>
@@ -25,10 +26,10 @@
         <form action="/login/register" method="post">
             <div id="register-text">
                 <input type="text" name="id" maxlength="20" placeholder="id" required>
-                <input type="text" name="pw" maxlength="20" placeholder="pw" required>
-                <input type="text" name="pw-re" maxlength="20" placeholder="pw-re" required>
+                <input type="password" name="pw" maxlength="20" placeholder="pw" required>
+                <input type="password" name="repw" maxlength="20" placeholder="pw-re" required>
                 <input type="text" name="name" maxlength="10" placeholder="name" required>
-                <input type="submit" value="register">
+                <input type="submit" value="register" class="submit-register-btn">
             </div>
         </form>
     </div>
