@@ -1,6 +1,6 @@
 import express from 'express';
 // import { Types } from 'mongoose';
-// import { UserModel } from '../mongooseSchema';
+import { UserModel } from '../mongooseSchema';
 
 const router = express.Router();
 
@@ -10,13 +10,16 @@ router.get('/', (req, res) => {
 });
 
 // POST Login and logout
-router.post('/');
-
-// GET Register Page
-router.get('/register', (req, res) => {
+router.post('/', (req, res) => {
   res.send(null);
 });
 
-const loginRouter = router
+// GET Register Page
+router.post('/register', (req, res) => {
+  const data = req.body;
+  res.send(data);
+});
+
+const loginRouter = router;
 // Module export
 export { loginRouter };

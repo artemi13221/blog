@@ -1,6 +1,5 @@
 #login-field {
-  position: relative;
-  margin: 500px auto;
+  margin: 25% auto;
   text-align: center;
   width: 30%;
 }
@@ -14,6 +13,30 @@
 
 #text-field > input {
   padding: 15px;
+}
+
+#register-field {
+  width: 30%;
+  margin: 25% auto;
+}
+
+#register-text {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 5px;
+}
+
+#register-text > input {
+  font-size: 15px;
+  margin-bottom: 5px;
+}
+
+.display-block {
+  display: block;
+}
+
+.display-none {
+  display: none;
 }
 
 .id-field {

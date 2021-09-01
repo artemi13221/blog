@@ -61,7 +61,6 @@ router.delete('/', async (req, res, next) => {
 // Writer Page
 router.get('/newpost', async (req, res, next) => {
   const postId = req.query.id ?? 'undefined';
-
   try {
     if (typeof postId !== 'string') {
       throw new Error('Wrong parameter. Check your parameter');
