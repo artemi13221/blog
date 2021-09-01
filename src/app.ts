@@ -1,242 +1,84 @@
-// const express = require('express');
+/* eslint-disable import/extensions */
+/* eslint-disable import/no-unresolved */
 import express from 'express';
-// const mongodb = require('mongodb').MongoClient;
-import { MongoClient } from 'mongodb';
-// const { ObjectId } = mongodb;
-import { ObjectId } from 'mongodb';
-// const { json: bodyParserJson } = require('body-parser');
-// require('dotenv').config();
-import { config } from 'dotenv';
-import * as cookieParser from 'cookie-parser';
-import * as Session from 'express-session';
+import cookieParser from 'cookie-parser';
+import expressSession from 'express-session';
+import dotenv from 'dotenv';
+import mongoose from 'mongoose';
+import console from 'console';
+import Router from './router/router';
 
-const HOURS = 1000 * 60 * 60;
-config(); // dotenv activated.
+dotenv.config();
 
-const mongodbUrl: string | undefined = process.env.MONGODB_URL;
-const app: express.Application = express();
-
-class BoardData {
-  title: string;
-  body: string;
-  createAt: Date;
-  modifiedAt: Date;
-
-  constructor(title: string, body: string, createAt: Date, modifiedAt: Date) {
-    this.title = title;
-    this.body = body;
-    this.createAt = createAt;
-    this.modifiedAt = modifiedAt;
+// connect db part
+async function connectMongoose() {
+  if (typeof process.env.MONGODB_URL === 'undefined') {
+    console.error('Check your dotenv file and add MONGODB_URL');
+    return;
+  }
+  try {
+    await mongoose.connect(process.env.MONGODB_URL, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      useFindAndModify: false,
+      useCreateIndex: true,
+      dbName: 'blog',
+    });
+  } catch (error) {
+    console.error('Database connected fail. Check your Internet or MONGODB_URL');
   }
 }
 
-if (mongodbUrl === undefined) {
-  console.log("Please make .env file and write MONGODB_URL");
-} else {
-  MongoClient.connect(mongodbUrl)
-    .then((client) => {
-      console.log('connected to database');
+// Express app main
+const app = express();
+const port = process.env.PORT ?? 10002;
 
-      const db = client.db('blog');
-      const boardCollections = db.collection('board');
+connectMongoose();
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', () => {
+  console.log('Connect Database');
+});
 
-      if (typeof process.env.SECRET === 'string') {
-        app.use(Session.default({
-          secret: process.env.SECRET,
-          saveUninitialized: false,
-          cookie: {
-            maxAge: HOURS,
-          },
-          resave: false,
-        }));
-      } else {
-        console.log("Please make .env file and write SECRET Key");
-        return;
-      }
-
-      app.use(express.static(`${__dirname}/../public`));
-      app.use(express.json());
-      app.use(express.urlencoded({ extended: false }));
-      app.use(cookieParser.default(process.env.SECRET));
-      app.set('view engine', 'ejs');
-
-      app.get('/', (req, res) => {
-        const page = req.query.page ?? 0;
-        boardCollections.find().toArray()
-          .then((result) => {
-            res.render('index.ejs', {
-              totalCount: result.length,
-              data: result,
-              user: {
-                role: (req.session as any).uid,
-              },
-              page: page,
-            });
-          })
-          .catch((error) => console.error(error));
-      });
-
-      app.get('/login', (req, res) => {
-        res.render('login.ejs');
-      });
-
-      app.post('/login', (req, res) => {
-        const id: unknown = req.body.id;
-        const pw: unknown = req.body.pw;
-
-        if (typeof id !== 'string' || typeof pw !== 'string') {
-          res.send('invalid id or pw');
-          return;
-        }
-
-        if (id !== process.env.ID && pw !== process.env.PASSWORD) {
-          res.send('invalid id or pw');
-          return;
-        }
-
-        (req.session as any).uid = id;
-        res.redirect('/');
-      });
-
-      app.get('/logout', (req, res) => {
-        req.session.destroy(() => req.session);
-        res.redirect('/');
-      })
-
-      app.get('/board/:id', (req, res, next) => {
-        let boardID: ObjectId;
-        try {
-          boardID = new ObjectId(req.params.id);
-        } catch (error) {
-          next(error);
-          return;
-        }
-
-        boardCollections.findOne({
-          _id: boardID,
-        })
-          .then((result) => {
-            res.render('post.ejs', {
-              data: result,
-            });
-          })
-          .catch((error) => {
-            console.error(error);
-            res.status(404).send('404 ERROR!');
-          }
-          );
-      });
-
-      app.post('/board', (req, res) => {
-        const data = req.body;
-        boardCollections.insertOne(
-          new BoardData(data.title, data.body, data.createAt, data.modifiedAt),
-        )
-          .then((result) => {
-            res.send('ok');
-          })
-          .catch((error) => console.error(error));
-      });
-
-      app.get('/newpost', (req, res, next) => {
-        let boardID: ObjectId;
-        try {
-          boardID = new ObjectId(req.query.id as string);
-        } catch (error) {
-          next(error);
-          return;
-        }
-
-        if ((req.session as any).uid !== 'artemi') {
-          res.redirect('/');
-          return;
-        }
-        boardCollections.findOne({
-          _id: boardID,
-        })
-          .then((result) => {
-            if (result === undefined) {
-              res.render('newpost.ejs', {
-                data: {
-                  title: '',
-                  body: '',
-                },
-              });
-            } else {
-              res.render('newpost.ejs', {
-                data: result,
-              });
-            }
-          })
-          .catch((error) => console.error(error));
-      });
-
-      app.put('/board', (req, res, next) => {
-        let boardID: ObjectId;
-        try {
-          boardID = new ObjectId(req.body.id);
-        } catch (error) {
-          next();
-          return;
-        }
-
-        const data = req.body;
-        boardCollections.updateOne({
-          _id: boardID
-        }, {
-          $set: {
-            title: data.title,
-            body: data.body,
-            modifiedAt: data.modifiedAt,
-          },
-        })
-          .then((result) => {
-            res.send('ok');
-          })
-          .catch((error) => console.error(error));
-      });
-
-      app.delete('/board', (req, res, next) => {
-        let boardID: ObjectId;
-        try {
-          boardID = new ObjectId(req.body.id);
-        } catch (error) {
-          next(error);
-          return;
-        }
-        if ((req.session as any).uid !== 'artemi') {
-          res.send('role error');
-          return;
-        }
-        boardCollections.deleteOne({
-          _id: boardID,
-        })
-          .then((result) => {
-            if (result.deletedCount === 0) {
-              res.send('error');
-            } else {
-              res.send('ok');
-            }
-          })
-          .catch((error) => console.error(error));
-      });
-
-      app.use((req, res, next) => {
-        const error = new Error(`${req.method} ${req.url} 라우터가 존재하지 않습니다.`);
-        res.locals.errorNum = 404;
-        next(error);
-      })
-
-      app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
-        res.locals.message = err.message;
-        res.locals.error = err.stack;
-        res.status(res.locals.errorNum ?? 500);
-        res.render('error.ejs');
-      });
-
-      app.listen(10001, () => {
-        console.log('10001port server open!');
-      });
-    })
-    .catch((error) => console.error(error));
+if (typeof process.env.COOKIE_SECRET !== 'string') {
+  console.error('Check your dotenv file and add COOKIE_SECRET');
+  process.exit(1);
 }
+// Express middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(express.static(`${__dirname}/../public`));
+app.use(cookieParser(process.env.COOKIE_SECRET));
+app.use(expressSession({
+  secret: process.env.COOKIE_SECRET,
+  saveUninitialized: false,
+  cookie: {
+    maxAge: 1000 * 60 * 60 * 2, // 2HOURS maxAge
+  },
+  resave: false,
+}));
+app.set('view engine', 'ejs');
+
+// Router
+app.use(Router);
+
+// Status 404
+app.use((req, res, next) => {
+  const err = new Error(`${req.method} ${req.url} 라우터가 없습니다.`);
+  res.locals.errNum = 404;
+  next(err);
+});
+
+// Error Handling function
+app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
+  res.locals.message = err.message;
+  res.locals.error = process.env.NODE_ENV !== 'production' ? err : {};
+  res.status(res.locals.errNum ?? 500);
+  res.render('error.ejs');
+  next();
+});
+
+// listen
+app.listen(10002, () => {
+  console.log(`PORT: ${port}, server open!`);
+});
